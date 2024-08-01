@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman wekan.service
-Requires=postgresql-app.service wekan-app.service
-Before=postgresql-app.service wekan-app.service
+Requires=mongo-app.service wekan-app.service
+Before=mongo-app.service wekan-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
