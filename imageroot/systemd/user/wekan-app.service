@@ -6,7 +6,7 @@
 [Unit]
 Description=Podman  wekan-app.service
 BindsTo=wekan.service
-After=wekan.service postgresql-app.service
+After=wekan.service mongo-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
@@ -21,11 +21,10 @@ ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/wekan-app.pid \
     --cidfile %t/wekan-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/wekan.pod-id --replace -d --name  wekan-app \
-    --volume wekan-app:/var/www/html/:Z \
-    --volume ./config:/tmp:Z \
-    --env=NGINX_* \
-    --env 'CONFIG_DATABASE_URI="postgresql://postgres:Nethesis,1234@127.0.0.1:5432/wekan"' \
-    ${NGINX_IMAGE}
+    --env-file=%S/state/wekan.env \
+    --volume /etc/localtime:/etc/localtime/:Z \
+    --volume wekan-files:/data/:Z \
+    ${WEKAN_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/wekan-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP wekan-app
 SyslogIdentifier=%u

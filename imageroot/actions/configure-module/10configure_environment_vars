@@ -13,21 +13,32 @@ import agent
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
+HOST = data.get("host")
 #This is specific to you module, so you need to change it accordingly.
-# we read a json stdin {"vars1":true, "var2":"foo", "vars3": 3} and we writ it to .config/state/environment
-# Upper case to set environment variable and minor case to read from stdin
 
-# this values must exists in the json stdin
-# agent.set_env("MAIL_SERVER", data["mail_server"])
-# agent.set_env("LDAP_DOMAIN", data["ldap_domain"])
+WRITABLE_PATH = data.get("WRITABLE_PATH", "/data")
+MONGO_URL = data.get("MONGO_URL", "mongodb://mongo-app:27017")
 
-# you can add default values for the following variables
-# agent.set_env("MAIL_DOMAIN",data.get("mail_domain",""))
-# agent.set_env("WOWORKERSCOUNT",data.get("workers_count",3))
-# agent.set_env("AUXILIARYACCOUNT",data.get("auxiliary_account",True))
-# agent.set_env("ACTIVESYNC",data.get("activesync",False))
+# Email Settings
+rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
 
+SMTP_HOST = smtp_settings['host']
+SMTP_PORT = smtp_settings['port']
+SMTP_USERNAME = smtp_settings['username']
+SMTP_PASSWORD = smtp_settings['password']
+SMTP_ENCRYPTION = smtp_settings['encrypt_smtp']
 
-# Make sure everything is saved inside the environment file
-# just before starting systemd unit
+# MAIL_URL=smtp://user:pass@mailserver.example.com:25/
+MAIL_URL = f"smtp://{SMTP_USERNAME}:{SMTP_PASSWORD}@{SMTP_HOST}:{SMTP_PORT}/"
+MAIL_FROM = f'Wekan <{SMTP_USERNAME}>'
+
+wekan_config = {
+    "WRITABLE_PATH": WRITABLE_PATH,
+    "MONGO_URL": MONGO_URL,
+    "MAIL_URL": MAIL_URL,
+    "MAIL_FROM": MAIL_FROM,
+    "ROOT_URL": f"https://{HOST}",
+}
+agent.write_envfile("wekan.env", wekan_config)
 #agent.dump_env()
