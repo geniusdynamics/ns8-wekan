@@ -1,19 +1,19 @@
 {
   "name": "wekan",
   "description": {
-    "en": "My wekan module"
+    "en": "Experience efficient task management with WeKan - the Open-Source, customizable, and privacy-focused kanban."
   },
   "categories": [],
   "authors": [
     {
-      "name": "Name Surname",
-      "email": "author@yourmail.org"
+      "name": "Kemboi Elvis",
+      "email": "kemboielvis@genius.ke"
     }
   ],
   "docs": {
-    "documentation_url": "https://docs.wekan.com/",
-    "bug_url": "https://github.com/NethServer/dev",
-    "code_url": "https://github.com/author/ns8-wekan"
+    "documentation_url": "https://wekan.github.io/",
+    "bug_url": "https://github.com/geniusdynamics/dev",
+    "code_url": "https://github.com/geniusdynamics/ns8-wekan"
   },
-  "source": "ghcr.io/nethserver/wekan"
+  "source": "ghcr.io/geniusdynamics/wekan"
 }
