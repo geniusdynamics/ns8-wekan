@@ -10,18 +10,16 @@ After=wekan.service mongo-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
-EnvironmentFile=%S/state/environment
-EnvironmentFile=-%S/state/smarthost.env
-WorkingDirectory=%S/state
+EnvironmentFile=%E/state/environment
+WorkingDirectory=%E/state
 Restart=always
 TimeoutStopSec=70
 ExecStartPre=/bin/mkdir -p config
 ExecStartPre=/bin/rm -f %t/wekan-app.pid %t/wekan-app.ctr-id
-ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/wekan-app.pid \
     --cidfile %t/wekan-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/wekan.pod-id --replace -d --name  wekan-app \
-    --env-file=%S/state/wekan.env \
+    --env-file=%E/state/wekan.env \
     --volume /etc/localtime:/etc/localtime/:Z \
     --volume wekan-files:/data/:Z \
     ${WEKAN_IMAGE}

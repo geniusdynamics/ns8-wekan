@@ -6,13 +6,13 @@
   "categories": [],
   "authors": [
     {
-      "name": "Kemboi Elvis",
-      "email": "kemboielvis@genius.ke"
+      "name": "Genius Dynamics",
+      "email": "support@genius.ke"
     }
   ],
   "docs": {
     "documentation_url": "https://wekan.github.io/",
-    "bug_url": "https://github.com/geniusdynamics/dev",
+    "bug_url": "https://github.com/geniusdynamics/ns8-wekan/issues",
     "code_url": "https://github.com/geniusdynamics/ns8-wekan"
   },
   "source": "ghcr.io/geniusdynamics/wekan"
