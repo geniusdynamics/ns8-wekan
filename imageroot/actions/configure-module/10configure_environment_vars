@@ -17,7 +17,7 @@ HOST = data.get("host")
 #This is specific to you module, so you need to change it accordingly.
 
 WRITABLE_PATH = data.get("WRITABLE_PATH", "/data")
-MONGO_URL = data.get("MONGO_URL", "mongodb://mongo-app:27017")
+MONGO_URL = data.get("MONGO_URL", "mongodb://127.0.0.1:27017/wekan")
 
 # Email Settings
 rdb = agent.redis_connect(use_replica=True)
@@ -36,9 +36,11 @@ MAIL_FROM = f'Wekan <{SMTP_USERNAME}>'
 wekan_config = {
     "WRITABLE_PATH": WRITABLE_PATH,
     "MONGO_URL": MONGO_URL,
-    "MAIL_URL": MAIL_URL,
-    "MAIL_FROM": MAIL_FROM,
     "ROOT_URL": f"https://{HOST}",
 }
+# Wekan parses MAIL_URL at startup: set it only with a configured smarthost
+if smtp_settings.get("enabled") and SMTP_HOST:
+    wekan_config["MAIL_URL"] = MAIL_URL
+    wekan_config["MAIL_FROM"] = MAIL_FROM
 agent.write_envfile("wekan.env", wekan_config)
 #agent.dump_env()
