@@ -21,7 +21,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/mongo-app.pid \
     --pod-id-file %t/wekan.pod-id --replace -d --name mongo-app \
     --volume wekan-db:/data/db/:Z \
     --volume wekan-db-dump:/dump/:Z \
-    --volume /etc/localtime:/etc/localtime/:Z \
+    --volume /etc/localtime:/etc/localtime:ro \
     ${MONGO_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/mongo-app.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/mongo-app.ctr-id

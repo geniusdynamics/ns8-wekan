@@ -20,7 +20,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/wekan-app.pid \
     --cidfile %t/wekan-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/wekan.pod-id --replace -d --name  wekan-app \
     --env-file=%E/state/wekan.env \
-    --volume /etc/localtime:/etc/localtime/:Z \
+    --volume /etc/localtime:/etc/localtime:ro \
     --volume wekan-files:/data/:Z \
     ${WEKAN_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/wekan-app.ctr-id -t 10
