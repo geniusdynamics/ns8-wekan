@@ -6,6 +6,7 @@
 #
 
 import json
+import os
 import sys
 import agent
 
@@ -17,10 +18,11 @@ HOST = data.get("host")
 #This is specific to you module, so you need to change it accordingly.
 
 WRITABLE_PATH = data.get("WRITABLE_PATH", "/data")
-MONGO_URL = data.get("MONGO_URL", "mongodb://mongo-app:27017")
+MONGO_URL = data.get("MONGO_URL", "mongodb://127.0.0.1:27017/wekan")
 
 # Email Settings
 rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
 
 SMTP_HOST = smtp_settings['host']
 SMTP_PORT = smtp_settings['port']
@@ -35,9 +37,14 @@ MAIL_FROM = f'Wekan <{SMTP_USERNAME}>'
 wekan_config = {
     "WRITABLE_PATH": WRITABLE_PATH,
     "MONGO_URL": MONGO_URL,
-    "MAIL_URL": MAIL_URL,
-    "MAIL_FROM": MAIL_FROM,
     "ROOT_URL": f"https://{HOST}",
+    # Wekan serves on port 8080 (unprivileged): the pod publishes it
+    "PORT": "8080",
 }
+# Wekan parses MAIL_URL at startup: set it only with a configured smarthost
+if smtp_settings.get("enabled") and SMTP_HOST:
+    wekan_config["MAIL_URL"] = MAIL_URL
+    wekan_config["MAIL_FROM"] = MAIL_FROM
 agent.write_envfile("wekan.env", wekan_config)
+os.chmod("wekan.env", 0o600)  # holds the smarthost password
 #agent.dump_env()

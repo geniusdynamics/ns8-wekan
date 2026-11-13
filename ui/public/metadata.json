@@ -1,9 +1,12 @@
 {
   "name": "wekan",
   "description": {
-    "en": "Experience efficient task management with WeKan - the Open-Source, customizable, and privacy-focused kanban."
+    "en": "Experience efficient task management with WeKan - the Open-Source, customizable, and privacy-focused kanban.",
+    "it": "WeKan è una lavagna kanban open source, personalizzabile e attenta alla privacy."
   },
-  "categories": [],
+  "categories": [
+    "collaboration"
+  ],
   "authors": [
     {
       "name": "Genius Dynamics",
