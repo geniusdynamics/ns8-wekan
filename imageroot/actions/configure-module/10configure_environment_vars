@@ -6,6 +6,7 @@
 #
 
 import json
+import os
 import sys
 import agent
 
@@ -37,10 +38,13 @@ wekan_config = {
     "WRITABLE_PATH": WRITABLE_PATH,
     "MONGO_URL": MONGO_URL,
     "ROOT_URL": f"https://{HOST}",
+    # Wekan serves on port 8080 (unprivileged): the pod publishes it
+    "PORT": "8080",
 }
 # Wekan parses MAIL_URL at startup: set it only with a configured smarthost
 if smtp_settings.get("enabled") and SMTP_HOST:
     wekan_config["MAIL_URL"] = MAIL_URL
     wekan_config["MAIL_FROM"] = MAIL_FROM
 agent.write_envfile("wekan.env", wekan_config)
+os.chmod("wekan.env", 0o600)  # holds the smarthost password
 #agent.dump_env()
